@@ -6,8 +6,8 @@
 
 | Resource | Link |
 | :--- | :--- |
-| Presentation Deck | [View Presentation](1.submission/Presentation_Deck.pdf) |
-| Prompt Documentation | [View Prompt Documentation](1.submission/Prompt_Documentation.pptx) |
+| Presentation Deck | [View Presentation](1.submission/Presentation_Deck.pptx) |
+| Prompt Documentation | [View Prompt Documentation](1.submission/Prompt_Documentation.pdf) |
 | Video Demo | [Watch Video Demo](https://drive.google.com/drive/u/0/folders/1ZtINOZo-JF6RMHSI7ad29KdCS-YCApln) |
 
 # 🚨 LIVE PRODUCTION DEMO — PLEASE READ FIRST
