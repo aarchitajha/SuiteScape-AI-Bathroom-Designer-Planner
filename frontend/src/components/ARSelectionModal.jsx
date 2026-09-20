@@ -8,7 +8,7 @@ export default function ARSelectionModal({ isOpen, onClose, bundle, arMode, onLa
   const theme = (bundle?.theme || 'Minimalist Modern').toLowerCase();
 
   // Pick matching USDZ suite model
-  let suiteUsdzPath = '/models/bathroom-suite.usdz';
+  let suiteUsdzPath = '/models/bathroom-suite-v2.usdz';
   if (theme.includes('luxury') || theme.includes('classic')) {
     suiteUsdzPath = '/models/suite-luxury.usdz';
   } else if (theme.includes('zen') || theme.includes('japanese')) {
