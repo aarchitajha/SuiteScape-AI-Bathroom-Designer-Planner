@@ -10,7 +10,7 @@
 | Prompt Documentation | [View Prompt Documentation](1.submission/Prompt_Documentation.pdf) |
 | Video Demo | [Watch Video Demo](https://drive.google.com/drive/u/0/folders/1ZtINOZo-JF6RMHSI7ad29KdCS-YCApln) |
 
-# 🚨 LIVE PRODUCTION DEMO — PLEASE READ FIRST
+# LIVE PRODUCTION — PLEASE READ FIRST
 
 ### Production Website
 
@@ -32,7 +32,23 @@ https://kohler-ai-bathroom-designer-planner.vercel.app/
 
 ---
 
-# KOHLER AI Bathroom Designer & Planner
+## Quick Links
+* [Key Features](#key-features)
+* [Design Themes](#design-themes)
+* [How It Works](#how-it-works)
+* [Tech Stack](#tech-stack)
+* [System Architecture](#system-architecture)
+* [Project Structure](#project-structure)
+* [Installation & Setup](#installation--setup)
+* [Environment Variables](#environment-variables)
+* [Usage Guide](#usage-guide)
+* [AI & Multi-Constraint System](#ai--multi-constraint-system)
+* [AI/LLM Provider Hierarchy](#aillm-provider-hierarchy)
+* [API Endpoints](#api-endpoints)
+* [Screenshots](#screenshots)
+* [Deployment](#deployment)
+* [Future Enhancements](#future-enhancements)
+* [License](#license)
 
 ---
 
@@ -202,7 +218,7 @@ kohler-track1/
 ├── backend/
 │   ├── main.py                    # FastAPI application entrypoint, CORS, lifespan, and route registry
 │   ├── config.py                  # Pydantic environment configuration, API keys, and LLM mode detection
-│   ├── requirements.txt           # Python dependencies (FastAPI, SQLAlchemy, ReportLab, Anthropic, etc.)
+│   ├── requirements.txt           # Python dependencies (FastAPI, SQLAlchemy, ReportLab, etc.)
 │   ├── db/
 │   │   ├── models.py              # SQLAlchemy models: Product and SketchHistory
 │   │   ├── session.py             # Database engine, session maker, and table initialization
@@ -436,7 +452,7 @@ Configure backend settings in `backend/.env`. Existing operating system environm
 | Variable Name | Description | Default / Example | Required |
 | :--- | :--- | :--- | :--- |
 | `DATABASE_URL` | SQLAlchemy connection string for catalog and sketch storage | `sqlite:///./kohler.db` | No |
-| `GROQ_API_KEY` | API key for hosted Groq LLM inference | `gsk_YOUR_KEY_HERE` | Yes (if not using Anthropic/Ollama) |
+| `GROQ_API_KEY` | API key for hosted Groq LLM inference | `gsk_YOUR_KEY_HERE` | Yes (if not using Ollama) |
 | `GROQ_MODEL` | Model identifier on Groq | `openai/gpt-oss-120b` | No |
 | `OLLAMA_BASE_URL` | Base URL for local Ollama instance | `http://localhost:11434` | Optional |
 | `OLLAMA_MODEL` | Local Ollama model identifier for chat | `llama3.2` | Optional |
@@ -500,10 +516,9 @@ The application's intelligence is split across four dedicated subsystems:
 - **Deterministic Intent Router:** A regex-based intent classification engine intercepts common commands (budget math, theme switches, greetings, dimensions) and executes them deterministically in < 1ms, bypassing external LLM latency while maintaining natural conversational capabilities.
 
 ### 3. Vision Layout Analysis (`vision.py`)
-- **Three-Tier Fallback Chain:**
-  1. Anthropic Claude 3.5 Sonnet Vision (`claude-3-5-sonnet-20241022`)
-  2. Local Ollama Vision Models (`llama3.2-vision`, `llava`, `minicpm-v`)
-  3. Aspect-ratio heuristic algorithm with MD5-seeded dimension estimation
+- **Fallback Chain:**
+  1. Local Ollama Vision Models (`llama3.2-vision`, `llava`, `minicpm-v`)
+  2. Aspect-ratio heuristic algorithm with MD5-seeded dimension estimation
 - **Spatial Zone Normalization:** Maps detected fixtures to normalized room coordinates `[nx, nz]` clamped within structural wall margins.
 
 ### 4. Sustainability Calculator (`sustainability.py`)
@@ -602,7 +617,7 @@ The system requires at least one valid LLM provider at startup and explicitly re
    ```bash
    uvicorn backend.main:app --host 0.0.0.0 --port $PORT
    ```
-3. Set environment variables (`GROQ_API_KEY` or `ANTHROPIC_API_KEY`, `DATABASE_URL`).
+3. Set environment variables (`GROQ_API_KEY`, `DATABASE_URL`).
 4. Ensure HTTPS is enabled on the backend domain to satisfy WebXR and camera security requirements.
 
 ---
