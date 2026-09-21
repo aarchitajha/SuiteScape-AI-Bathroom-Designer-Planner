@@ -1,4 +1,4 @@
-# KOHLER AI Bathroom Designer & Planner
+# SuiteScape AI Bathroom Designer & Planner
 
 > Intelligent multi-constraint bathroom design, spatial clearance validation, real-time 3D/2D visualization, conversational fixture refinement, and cross-platform Augmented Reality powered by authentic Kohler India catalog data.
 
@@ -56,7 +56,7 @@ https://kohler-ai-bathroom-designer-planner.vercel.app/
 
 Designing a residential bathroom requires balancing tight spatial clearances, strict plumbing and electrical (MEP) rough-in requirements, budget limits, aesthetic coherence, and sustainability standards. Traditional planning tools either present static product catalogs without spatial intelligence or require complex CAD software with no real-world pricing or catalog integration.
 
-The **KOHLER AI Bathroom Designer & Planner** solves this by combining algorithmic multi-constraint optimization with conversational AI, real-time 3D rendering, and real Kohler product specifications. Users input room dimensions, budget, and design preferences—or upload a rough floor plan sketch—and the system generates three synchronized, clearance-compliant bathroom suite tiers (*Budget-Optimized*, *Balanced Signature*, and *Artisan Luxury*). Users can explore the design in interactive 3D, inspect 2D architectural CAD plans, converse with an AI designer to swap fixtures in real time, view fixtures or full suites in real-scale Augmented Reality (WebXR for Android and Apple AR Quick Look for iOS), and export itemized, branded PDF quotations with water-conservation metrics.
+The **SuiteScape AI Bathroom Designer & Planner** solves this by combining algorithmic multi-constraint optimization with conversational AI, real-time 3D rendering, and real Kohler product specifications. Users input room dimensions, budget, and design preferences—or upload a rough floor plan sketch—and the system generates three synchronized, clearance-compliant bathroom suite tiers (*Budget-Optimized*, *Balanced Signature*, and *Artisan Luxury*). Users can explore the design in interactive 3D, inspect 2D architectural CAD plans, converse with an AI designer to swap fixtures in real time, view fixtures or full suites in real-scale Augmented Reality (WebXR for Android and Apple AR Quick Look for iOS), and export itemized, branded PDF quotations with water-conservation metrics.
 
 ---
 
