@@ -1,6 +1,6 @@
 """
 Vision layout router.
-Accepts a user-uploaded photo/sketch and uses Claude Vision to estimate
+Accepts a user-uploaded photo/sketch and uses a Groq vision-capable model to estimate
 room dimensions AND identifiable fixture zones, then the frontend feeds
 both into the optimizer after confirmation.
 """
@@ -12,7 +12,6 @@ import re
 import uuid
 from typing import Any, Dict, List, Optional
 
-import anthropic
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel, Field
 
@@ -303,38 +302,54 @@ Respond with ONLY valid JSON (no markdown):
 
     parsed = None
 
-    if settings.is_anthropic_key_configured():
-        api_key = settings.get_anthropic_api_key()
+    if settings.is_groq_key_configured():
+        groq_model = settings.GROQ_VISION_MODEL.strip()
+        if not settings.is_groq_vision_model_supported(groq_model):
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    "Groq image vision is not currently available for this project because the "
+                    "active Groq API catalog exposes no supported vision-capable model. "
+                    "Set GROQ_VISION_MODEL to a currently supported Groq vision model before using "
+                    "the image-analysis endpoint."
+                ),
+            )
         try:
-            client = anthropic.Anthropic(api_key=api_key, timeout=25.0)
-            response = client.messages.create(
-                model="claude-3-5-sonnet-20241022",
+            from openai import OpenAI
+
+            client = OpenAI(api_key=settings.get_groq_api_key(), base_url="https://api.groq.com/openai/v1")
+            response = client.chat.completions.create(
+                model=settings.GROQ_VISION_MODEL,
                 max_tokens=700,
+                temperature=0.1,
                 messages=[
                     {
                         "role": "user",
                         "content": [
+                            {"type": "text", "text": vision_prompt},
                             {
-                                "type": "image",
-                                "source": {
-                                    "type": "base64",
-                                    "media_type": media_type,
-                                    "data": image_b64
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": f"data:{media_type};base64,{image_b64}"
                                 }
-                            },
-                            {
-                                "type": "text",
-                                "text": vision_prompt
                             }
                         ]
                     }
                 ]
             )
-            raw_text = response.content[0].text.strip()
-            logger.info("[Vision] Claude response: %s", raw_text[:800])
+            content = response.choices[0].message.content
+            if isinstance(content, list):
+                raw_text = "".join(
+                    part.get("text", "") if isinstance(part, dict) else str(part)
+                    for part in content
+                )
+            else:
+                raw_text = content or ""
+            raw_text = raw_text.strip()
+            logger.info("[Vision] Groq response: %s", raw_text[:800])
             parsed = _extract_json(raw_text)
         except Exception as e:
-            logger.warning("[Vision] Claude Vision call failed: %s, falling back to local vision/heuristic", e)
+            logger.warning("[Vision] Groq Vision call failed: %s, falling back to local vision/heuristic", e)
 
     if not parsed:
         parsed = await _try_ollama_vision(image_b64, vision_prompt)

@@ -38,6 +38,11 @@ class Settings:
     # Groq model IDs can be deprecated with a hard cutoff date; verify current IDs at
     # https://console.groq.com/docs/deprecations before changing production deployments.
     GROQ_MODEL: str = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
+    GROQ_VISION_MODEL: str = os.getenv("GROQ_VISION_MODEL", "")
+    _VISION_CAPABLE_GROQ_MODELS = {
+        "llama-3.2-11b-vision-preview",
+        "llama-3.2-90b-vision-preview",
+    }
 
     OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
     OLLAMA_MODEL: str = os.getenv("OLLAMA_MODEL", "llama3.2")
@@ -82,6 +87,14 @@ class Settings:
             return False
         lowered = key.lower()
         return not any(fragment in lowered for fragment in _PLACEHOLDER_FRAGMENTS)
+
+    def is_groq_vision_model_supported(self, model_name: str | None = None) -> bool:
+        model = (model_name or self.GROQ_VISION_MODEL or "").strip().lower()
+        if not model:
+            return False
+        if "vision" in model:
+            return True
+        return model in {m.lower() for m in self._VISION_CAPABLE_GROQ_MODELS}
 
     def is_ollama_available(self) -> bool:
         try:
