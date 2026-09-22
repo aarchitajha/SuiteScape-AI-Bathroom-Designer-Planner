@@ -14,8 +14,8 @@
 
 ### Production Website
 
-<a href="https://kohler-ai-bathroom-designer-planner.vercel.app/" target="_blank" rel="noopener noreferrer">
-https://kohler-ai-bathroom-designer-planner.vercel.app/
+<a href="https://smart-ai-bathroom-designer-planner.vercel.app/" target="_blank" rel="noopener noreferrer">
+https://smart-ai-bathroom-designer-planner.vercel.app/
 </a>
 
 > ⚠️ **IMPORTANT — PLEASE WAIT 1–2 MINUTES BEFORE USING THE WEBSITE**
