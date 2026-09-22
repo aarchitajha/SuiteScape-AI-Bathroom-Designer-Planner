@@ -303,23 +303,15 @@ Respond with ONLY valid JSON (no markdown):
     parsed = None
 
     if settings.is_groq_key_configured():
-        groq_model = settings.GROQ_VISION_MODEL.strip()
-        if not settings.is_groq_vision_model_supported(groq_model):
-            raise HTTPException(
-                status_code=400,
-                detail=(
-                    "Groq image vision is not currently available for this project because the "
-                    "active Groq API catalog exposes no supported vision-capable model. "
-                    "Set GROQ_VISION_MODEL to a currently supported Groq vision model before using "
-                    "the image-analysis endpoint."
-                ),
-            )
+        groq_model = (settings.GROQ_VISION_MODEL or settings.GROQ_MODEL).strip()
+        if not groq_model:
+            logger.warning("[Vision] GROQ_VISION_MODEL is empty; using GROQ_MODEL=%s", settings.GROQ_MODEL)
         try:
             from openai import OpenAI
 
             client = OpenAI(api_key=settings.get_groq_api_key(), base_url="https://api.groq.com/openai/v1")
             response = client.chat.completions.create(
-                model=settings.GROQ_VISION_MODEL,
+                model=groq_model,
                 max_tokens=700,
                 temperature=0.1,
                 messages=[
@@ -349,7 +341,7 @@ Respond with ONLY valid JSON (no markdown):
             logger.info("[Vision] Groq response: %s", raw_text[:800])
             parsed = _extract_json(raw_text)
         except Exception as e:
-            logger.warning("[Vision] Groq Vision call failed: %s, falling back to local vision/heuristic", e)
+            logger.warning("[Vision] Groq Vision call failed for model %s: %s. Falling back to local vision/heuristic.", groq_model, e)
 
     if not parsed:
         parsed = await _try_ollama_vision(image_b64, vision_prompt)
